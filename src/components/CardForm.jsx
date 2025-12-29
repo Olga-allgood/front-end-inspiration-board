@@ -13,6 +13,8 @@ function CardForm({addCard}) {
         } else {alert("Please type your message.")}} 
     
     return (
+        // when user is done typing and the state here updates, user clicks onSubmit
+        // and event travels up
         <form onSubmit= {submitCardForm}>
             <h1>Create a New Card</h1>
             <label>Message</label>
