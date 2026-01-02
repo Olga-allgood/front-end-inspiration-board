@@ -16,19 +16,21 @@ function BoardForm({onAddBoard}) {
     
 
     return (
-        <form onSubmit = {submitBoardForm}>
-            <label>title</label>
+        <form className="board-form-container" onSubmit = {submitBoardForm}>
+            <h2>Create a New Board</h2>
+            <label>Title: </label>
             <input
                 name="title"
                 value={dataForm.title}
                 onChange={updateDataForm}>
             </input>
-            <label>Owner's Name</label>
+            <label>Owner's Name: </label>
             <input
                 name="ownerName"
                 value={dataForm.ownerName}
                 onChange={updateDataForm}>
             </input>
+            <p>{`Preview: ${dataForm.title} - ${dataForm.ownerName}`}</p>
             <button type='submit'>Submit Board Form</button>
 
         </form>

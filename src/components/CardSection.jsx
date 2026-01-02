@@ -1,7 +1,8 @@
 import CardForm from './CardForm';
 import CardList from './CardList';
+
 function CardSection ({selectedBoard, addCard, addLikes, deleteCard}){
-    if (!selectedBoard) {
+    if (!selectedBoard){
         return <p>Please select a board.</p>
     }
 
@@ -9,8 +10,8 @@ function CardSection ({selectedBoard, addCard, addLikes, deleteCard}){
         <>
         <CardForm addCard={addCard}/>
         <CardList cards={selectedBoard.cards} addLikes={addLikes} deleteCard={deleteCard}/>
-        {/* we are passing only the array with cards dwon as a prop */}
-       
+        {/* passing only the array with cards down as a prop */}
+        
         </>
     )
 

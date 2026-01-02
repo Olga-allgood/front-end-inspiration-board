@@ -6,8 +6,10 @@ function CardList ({cards, addLikes, deleteCard}) {
    
     return (
         <ol> 
-        <h1>Cards</h1>
-    {cards.map(card => <CardItem key={card.id} card={card} addLikes={addLikes} deleteCard={deleteCard}/>)}
+        <h2>Cards</h2>
+        <div className="card-item-container">
+        {cards.map(card => <CardItem key={card.id} card={card} addLikes={addLikes} deleteCard={deleteCard}/>)}
+       </div>
     </ol>)
 }
 export default CardList;
