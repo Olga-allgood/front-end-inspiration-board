@@ -1,5 +1,5 @@
 import { useState } from 'react'
-function CardForm({addCard}) {
+function CardForm({addCard, boardId}) {
     const [message, setMessage] = useState('')
 
     // submitCardForm - handler for this component - data travels up
@@ -8,7 +8,7 @@ function CardForm({addCard}) {
         // - prop -data travels down from App
         if (message.trim()){
             // trim() removes white spaces from string
-        addCard(message);
+        addCard(boardId, message);
         setMessage('')
         } else {alert("Please type your message.")}} 
     
