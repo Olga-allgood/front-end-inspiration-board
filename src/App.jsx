@@ -2,7 +2,7 @@
 import './App.css'
 import BoardSection from './components/BoardSection';
 import CardSection from './components/CardSection';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios';
 
 const BASE_URL = 'https://back-end-inspiration-board-1-1pb6.onrender.com'
@@ -46,6 +46,12 @@ const createCardAPI = (boardId, message) => {
       .catch(err => console.error(err));
 }
 
+const deleteCardAPI = (boardId, cardId) => {
+  return axios.delete(`${BASE_URL}/boards/${boardId}/${cardId}`)
+     .then(res => res.data)
+     .catch(err => console.error(err));
+}
+
 const deleteBoardAPI = (boardId) => {
   return axios.delete(`${BASE_URL}/boards/${boardId}`)
      .then(res => res.data)
@@ -59,22 +65,39 @@ const likeCardAPI = (cardId) => {
 }
 
 function App() {
-  const [boards, setBoards] = useState([getAllBoardsAPI()])
+  const [boards, setBoards] = useState([])
   const [selectedBoardId, setBoardId] = useState(null)
   const [formDisplayed, setFormDisplay] = useState(true)
   console.log(boards);
   // we are taking the old state and toggling the old state. We need to pass it to the BoardSection and then to BoardForm
   const toggleFormDisplayed = () => setFormDisplay(prev => !prev)
 
-  const addBoard = ({ title, ownerName }) => {
-    const newBoard = {
-      id: Date.now(),
-      title,
-      ownerName,
-      cards: []
-    };
-    setBoards(boards => [...boards, newBoard])
+// THIS FUNCTION UPDATES THE STATE and BOARDS
+  const setBoardsAPI = () => {
+    getAllBoardsAPI()
+    .then(res => setBoards(res.data))
+    .catch(err => console.error(err));
   }
+  useEffect(() => setBoardsAPI(), []);
+
+  const deleteBoard = (boardId) => {
+    deleteBoardAPI(boardId)
+    .then(() => setBoardsAPI())
+    .catch(err => console.error(err));
+
+  }
+  const addBoard = ({ title, ownerName }) => {
+    createBoardAPI(title, ownerName)
+    .then(res => setBoards(boards => [...boards, res.data]))
+    .catch(err => console.error(err)); }
+  //   const newBoard = {
+  //     id: Date.now(),
+  //     title,
+  //     ownerName,
+  //     cards: []
+  //   };
+  //   setBoards(boards => [...boards, newBoard])
+  // }
   const selectBoard = (id) => {
     setBoardId(id);
   }
@@ -87,13 +110,17 @@ function App() {
   // message is a parameter that is a state that's coming from CardForm
   const addCard = (boardId, message) => {
     createCardAPI(boardId, message)
+       .then(() => setBoardsAPI())
+       .catch(err => console.error(err));
     // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
     //   { ...board, cards: [...board.cards, { message, id: Date.now(), likes: 0 }] } :
     //   board));
   }
-
+// BACKEND NEEDS TO HAVE CORRECT ENDPOINT
   const addLikes = (cardId) => {
-    likeCardAPI(cardId);
+    likeCardAPI(cardId)
+    .then(() => setBoardsAPI())
+    .catch(err => console.error(err))
     // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
     //   {
     //     ...board, cards: board.cards.map(card => card.id === cardId ?
@@ -101,13 +128,16 @@ function App() {
     //     )
     //   } : board));
   }
-
-  const deleteCard = (cardId) => {
-    setBoards(boards => boards.map(board => board.id === selectedBoardId ?
-      {
-        ...board, cards: board.cards.filter(card => card.id !== cardId
-        )
-      } : board));
+// BACKEND NEEDS TO HAVE CORRECT ENDPOINT
+  const deleteCard = (boardId, cardId) => {
+    deleteCardAPI(boardId, cardId)
+    .then(() => setBoardsAPI())
+    .catch(err => console.error(err))
+    // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
+    //   {
+    //     ...board, cards: board.cards.filter(card => card.id !== cardId
+    //     )
+    //   } : board));
   }
 
 
@@ -116,7 +146,7 @@ function App() {
 
     <div className='app-container'>
       <BoardSection onAddBoard={addBoard} boards={boards} selectBoard={selectBoard} toggleFormDisplayed={toggleFormDisplayed} formDisplayed={formDisplayed} />
-      <CardSection selectedBoard={selectedBoard} addCard={addCard} addLikes={addLikes} deleteCard={deleteCard} deleteBoard = {deleteBoardAPI} />
+      <CardSection selectedBoard={selectedBoard} addCard={addCard} addLikes={addLikes} deleteCard={deleteCard} deleteBoard = {deleteBoard} />
       {/* addCard is traveling as a prop down to the cardForm */}
 
     </div>
@@ -124,5 +154,6 @@ function App() {
 
   )
 }
+
 
 export default App

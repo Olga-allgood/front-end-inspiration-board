@@ -10,7 +10,7 @@ function CardSection ({selectedBoard, addCard, addLikes, deleteCard, deleteBoard
         <div className="card-section">
         <CardForm addCard={addCard} boardId={selectedBoard.id}/>
         <button onClick={()=> deleteBoard(selectedBoard.id)}>Delete a board</button>
-        <CardList cards={selectedBoard.cards} addLikes={addLikes} deleteCard={deleteCard}/>
+        <CardList cards={selectedBoard.cards} addLikes={addLikes} deleteCard={deleteCard} selectedBoard={selectedBoard}/>
       
         {/* passing only the array with cards down as a prop */}
         
