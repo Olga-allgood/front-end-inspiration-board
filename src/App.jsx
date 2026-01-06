@@ -68,16 +68,20 @@ function App() {
   const [boards, setBoards] = useState([])
   const [selectedBoardId, setBoardId] = useState(null)
   const [formDisplayed, setFormDisplay] = useState(true)
+  const [selectedBoard, setSelectedBoard] = useState(null)
   console.log(boards);
   // we are taking the old state and toggling the old state. We need to pass it to the BoardSection and then to BoardForm
   const toggleFormDisplayed = () => setFormDisplay(prev => !prev)
 
+  
+
 // THIS FUNCTION UPDATES THE STATE and BOARDS
+// res.data is not the correct approach here for setBoards
   const setBoardsAPI = () => {
     getAllBoardsAPI()
-    .then(res => setBoards(res.data))
+    .then(data => setBoards(data))
     .catch(err => console.error(err));
-  }
+}
   useEffect(() => setBoardsAPI(), []);
 
   const deleteBoard = (boardId) => {
@@ -88,7 +92,7 @@ function App() {
   }
   const addBoard = ({ title, ownerName }) => {
     createBoardAPI(title, ownerName)
-    .then(res => setBoards(boards => [...boards, res.data]))
+    .then(res => setBoards(boards => [...boards, res]))
     .catch(err => console.error(err)); }
   //   const newBoard = {
   //     id: Date.now(),
@@ -104,18 +108,34 @@ function App() {
   // const selectedBoard = boards.find(board => board.id === selectedBoardId);
   // console.log(selectedBoard);
 
-  const selectedBoard = getOneBoardAPI(selectedBoardId)
+// RETHINK WHEN THIS FUNCTION RUNS.IT SHOULD NOT BE RUNNING EVERY TIME THE PAGE 
+  // const selectedBoard = getOneBoardAPI(selectedBoardId)
+
+  useEffect(() => {
+  if (!selectedBoardId) return;
+
+  getOneBoardAPI(selectedBoardId)
+    .then(data => setSelectedBoard(data))
+    .catch(err => console.error(err));
+}, [selectedBoardId]);
 
   // the event is called here from CardForm 
   // message is a parameter that is a state that's coming from CardForm
-  const addCard = (boardId, message) => {
-    createCardAPI(boardId, message)
-       .then(() => setBoardsAPI())
-       .catch(err => console.error(err));
+  // const addCard = (boardId, message) => {
+  //   createCardAPI(boardId, message)
+  //      .then(() => setBoardsAPI())
+  //      .catch(err => console.error(err));
     // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
     //   { ...board, cards: [...board.cards, { message, id: Date.now(), likes: 0 }] } :
     //   board));
-  }
+
+
+  const addCard = (boardId, message) => {
+  createCardAPI(boardId, message)
+    .then(() => getOneBoardAPI(boardId))
+    .then(data => setSelectedBoard(data))
+    .catch(err => console.error(err));
+};
 // BACKEND NEEDS TO HAVE CORRECT ENDPOINT
   const addLikes = (cardId) => {
     likeCardAPI(cardId)
@@ -154,6 +174,7 @@ function App() {
 
   )
 }
+
 
 
 export default App
