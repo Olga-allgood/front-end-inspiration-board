@@ -1,19 +1,33 @@
-import CardForm from './CardForm';
-import CardList from './CardList';
+import { useState } from 'react'
+function CardForm({addCard, boardId}) {
+    const [message, setMessage] = useState('')
 
-function CardSection ({selectedBoard, addCard, addLikes, deleteCard}){
-    if (!selectedBoard){
-        return <p>Please select a board.</p>
-    }
-
+    // submitCardForm - handler for this component - data travels up
+    const submitCardForm = (event) => {
+        event.preventDefault()
+        // - prop -data travels down from App
+        if (message.trim()){
+            // trim() removes white spaces from string
+        addCard(boardId, message);
+        setMessage('')
+        } else {alert("Please type your message.")}} 
+    
     return (
-        <>
-        <CardForm addCard={addCard}/>
-        <CardList cards={selectedBoard.cards} addLikes={addLikes} deleteCard={deleteCard}/>
-        {/* passing only the array with cards down as a prop */}
-        
-        </>
-    )
+        // when user id done typing and the state here updates, user clicks onSubmit 
+        // and event travels up
+        <form onSubmit= {submitCardForm}>
+            <h2>Create a New Card</h2>
+            <label>Message</label>
+            <input 
+            name="message"
+            value={message} 
+            onChange={event => setMessage(event.target.value)}/>
+            <p>{`Preview: ${message}`}</p>
+            <button type='submit'>Add a card</button>
 
+        </form>
+    )
 }
-export default CardSection;
+
+
+export default CardForm;
