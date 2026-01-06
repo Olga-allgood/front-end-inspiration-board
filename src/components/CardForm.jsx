@@ -28,4 +28,6 @@ function CardForm({addCard, boardId}) {
         </form>
     )
 }
+
+
 export default CardForm;

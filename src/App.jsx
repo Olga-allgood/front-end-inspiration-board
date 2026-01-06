@@ -73,7 +73,17 @@ function App() {
   // we are taking the old state and toggling the old state. We need to pass it to the BoardSection and then to BoardForm
   const toggleFormDisplayed = () => setFormDisplay(prev => !prev)
 
-  
+//   const createCardAPI = (boardId, message) => {
+//   return axios.post(`${BASE_URL}/cards`, {
+//     message: message,
+//     board_id: boardId
+//   })
+//   .then(res => res.data)
+//   .catch(err => {
+//     console.error(err);
+//     throw err;
+//   });
+// };
 
 // THIS FUNCTION UPDATES THE STATE and BOARDS
 // res.data is not the correct approach here for setBoards
