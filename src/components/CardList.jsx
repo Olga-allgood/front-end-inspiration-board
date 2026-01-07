@@ -7,7 +7,7 @@ function CardList ({cards, addLikes, deleteCard, selectedBoard}) {
    
     return (
         <ol> 
-        <h2>Cards</h2>
+        <h2>Cards for {selectedBoard.title}</h2>
         <div className="card-item-container">
         {cards.map(card => <CardItem key={card.id} card={card} addLikes={addLikes} deleteCard={deleteCard} selectedBoard={selectedBoard}/>)}
        </div>
