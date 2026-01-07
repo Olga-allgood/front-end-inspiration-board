@@ -162,7 +162,12 @@ function App() {
 // BACKEND NEEDS TO HAVE CORRECT ENDPOINT
   const addLikes = (cardId, boardId) => {
     likeCardAPI(cardId)
-    .then(() => getAllCards(boardId))
+    .then((res) => {
+      // Update the card with the response data from the backend
+      setCards(cards => cards.map(card => 
+        card.id === cardId ? res.data : card
+      ))
+    })
     .catch(err => console.error(err))
     // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
     //   {
@@ -174,7 +179,10 @@ function App() {
 // BACKEND NEEDS TO HAVE CORRECT ENDPOINT
   const deleteCard = (boardId, cardId) => {
     deleteCardAPI(boardId, cardId)
-    .then(() => getAllCards(boardId))
+    .then(() => {
+      // Remove the card from the cards array without refetching
+      setCards(cards => cards.filter(card => card.id !== cardId))
+    })
     .catch(err => console.error(err))
     // setBoards(boards => boards.map(board => board.id === selectedBoardId ?
     //   {
