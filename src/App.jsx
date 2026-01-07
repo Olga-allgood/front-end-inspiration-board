@@ -47,7 +47,7 @@ const createCardAPI = (boardId, message) => {
 }
 
 const deleteCardAPI = (boardId, cardId) => {
-  return axios.delete(`${BASE_URL}/boards/${boardId}/${cardId}`)
+  return axios.delete(`${BASE_URL}/cards/${cardId}`)
     //  .then(res => res.data)
     //  .catch(err => console.error(err));
 }
