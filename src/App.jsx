@@ -95,9 +95,22 @@ function App() {
 }
   useEffect(() => setBoardsAPI(), []);
 
+  // const deleteBoard = (boardId) => {
+  //   deleteBoardAPI(boardId)
+  //   .then(() => setBoardsAPI())
+  //   .catch(err => console.error(err));
+
+  // }
+
   const deleteBoard = (boardId) => {
     deleteBoardAPI(boardId)
-    .then(() => setBoardsAPI())
+    .then(() => {
+      setBoardsAPI()
+      // getAllCards(boardId)
+      setCards([])
+      setSelectedBoard(null)
+      setBoardId(null)
+    })
     .catch(err => console.error(err));
 
   }
